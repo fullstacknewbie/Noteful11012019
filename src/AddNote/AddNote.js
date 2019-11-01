@@ -1,19 +1,17 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
-//import App from '../App/App';
+import App from '../App/App';
 import Config from '../config'
 import ApiContext from '../ApiContext'
 import './AddNote.css'
 
-addNote = note => {
-    this.setState({
-        notes: [...this.state.notes,note]
-    })
-}
-
 class AddNote extends React.Component {
+    constructor(props) {
+        super(props);
+    }
     static contextType = ApiContext;
-    handleSubmit(e) {
+    
+    handleSubmit = e => {
         e.preventDefault();
         const note = {
             id: e.target['folderId'].value,
@@ -22,7 +20,7 @@ class AddNote extends React.Component {
             folderId: e.target['folderId'].value,
             content: e.target['content'].value
         }
-        console.log(note);
+        console.log(note.id);
         fetch(`${Config.API_ENDPOINT}/notes`, {
           method: 'POST',
           headers: {
@@ -30,9 +28,13 @@ class AddNote extends React.Component {
           },
           body: JSON.stringify(note),
         })
-           .then(note => {
-             //console.log(this.context);
-                this.context.addNote(note);
+            .then(res => res.json())
+            .then(note => {
+                console.log(note.id);
+                //this.context.addNote(note);
+                this.context.notes[note.id] = note.name;
+                this.context.notes.push(note)
+                this.props.history.push('/')
            })
     }
 

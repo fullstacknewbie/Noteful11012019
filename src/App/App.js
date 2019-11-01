@@ -99,8 +99,14 @@ class App extends Component {
     addNote = note => {
         this.setState({
             notes: [...this.state.notes,note]
-        })
-    }
+        });
+    };
+
+    addFolder = folder => {
+        this.setState({
+            folder: [...this.state.folders,folder]
+        });
+    };
 
     render() {
         const value = {

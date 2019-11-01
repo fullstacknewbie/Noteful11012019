@@ -1,16 +1,23 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
-//import App from '../App/App';
 import Config from '../config'
 import ApiContext from '../ApiContext'
-//import {Route, Link} from 'react-router-dom';
 import './AddFolder.css';
-//import { Redirect } from 'react-router';
 
 class AddFolder extends React.Component {
+  constructor(props) {
+    super(props);
+  }
     static contextType = ApiContext;
 
-    handleSubmit(e) {
+    // addFolder = folder => {
+    //   this.setState({
+    //       folders: [...this.context.folders, folder]
+    //   });
+    // };
+
+    //THIS.CONTEXT.FOLDERS IS AN OBJECT, HOW DO I ADD A NEW KEY/VALUE PAIR ({FOLDER}) TO IT
+
+    handleSubmit = e => {
         e.preventDefault()
         const folder = {
           id: e.target['id'].value,
@@ -23,22 +30,17 @@ class AddFolder extends React.Component {
           },
           body: JSON.stringify(folder),
         })
-          //.then(function() {
-            //console.log(this.context);
-            //console.log("hello");
-            //this.history.push('/')
-            //this.context(responseData);
+          .then(res => res.json())
+          .then(folder => {
+            this.context.folders[folder.name] = folder.name;
+            console.log(this.context.folders)
+            this.context.folders[folder.id] = folder.id;
+            console.log(this.context.folders)
             //this.props.history.push('/')
-           //})
-          //.then(function() {
-            //console.log("hello")
-            //this.props.history.push(`/`)
-          //})
-      }
-
-      //returnToHome() {
-        //this.props.history.push(`/`)
-      //}
+            this.context.folders.push(folder)
+            this.props.history.push('/')
+          })
+    }
 
     render () {
         return (
